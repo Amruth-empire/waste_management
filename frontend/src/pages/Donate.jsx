@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // <-- import this
 import { DonationContext } from "../context/DonationContext";
 import React from "react";
 
@@ -6,6 +7,15 @@ const Donate = () => {
   const { addDonation } = useContext(DonationContext);
   const [amount, setAmount] = useState("");
   const [selectedAmount, setSelectedAmount] = useState(null);
+  const navigate = useNavigate();
+
+  // Redirect to login if user is not logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // or sessionStorage
+    if (!token) {
+      navigate("/login"); // redirect to login page
+    }
+  }, [navigate]);
 
   const handleAmountClick = (value) => {
     setSelectedAmount(value);
@@ -24,7 +34,7 @@ const Donate = () => {
   };
 
   return (
-    <>
+   <>
       {/* HERO SECTION */}
       <section className="relative min-h-[300px] flex items-center justify-center text-center px-4 bg-[#0d80f2]">
         <div className="z-10 flex flex-col items-center gap-4 max-w-2xl">

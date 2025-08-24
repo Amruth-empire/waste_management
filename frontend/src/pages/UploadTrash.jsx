@@ -7,15 +7,28 @@ const UploadTrash = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Load stored image on mount
+  // ✅ Check login on mount
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login"); // redirect if user is not logged in
+      return;
+    }
+
+    // Load stored image if available
     const savedImage = localStorage.getItem("uploadedImage");
     if (savedImage) setUploadedImage(savedImage);
-  }, []);
+  }, [navigate]);
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("photo", file);
@@ -23,6 +36,9 @@ const UploadTrash = () => {
     try {
       const res = await fetch("http://localhost:5000/api/photos", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // send token to backend
+        },
         body: formData,
       });
 
@@ -52,10 +68,10 @@ const UploadTrash = () => {
         const updatedHistory = [newEntry, ...history];
         localStorage.setItem("tokenHistory", JSON.stringify(updatedHistory));
 
-        // ✅ Trigger storage event manually so Tokens.jsx updates immediately
+        // Trigger storage event manually so Tokens.jsx updates immediately
         window.dispatchEvent(new Event("storage"));
 
-        // ✅ Redirect to Tokens page
+        // Redirect to Tokens page
         navigate("/tokens", { state: { newTokens } });
       } else {
         alert(data.message || "Upload failed");
