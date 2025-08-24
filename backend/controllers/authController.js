@@ -50,3 +50,16 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// @desc Logout user
+export const logoutUser = async (req, res) => {
+  try {
+    // In a stateless JWT setup, there's no real server-side logout
+    // But you can clear a cookie or add token to a blacklist here if needed.
+
+    res.json({ message: "Logout successful" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -6,8 +6,9 @@ import Donate from './pages/Donate';
 import UploadTrash from './pages/UploadTrash';
 import Login from './pages/Login';
 import SignUp from "./pages/Signup";
-import React from 'react';
 import Tokens from './pages/Tokens';
+import Dashboard from './pages/Dashboard'; // <-- Import Dashboard
+import React from 'react';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/tokens" element={<Tokens />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/dashboard" element={<Dashboard />} /> {/* <-- Added */}
             </Routes>
           </div>
         </main>
